@@ -1,0 +1,104 @@
+{
+  "lessonId": "basics_1_l1",
+  "skillId": "basics_1",
+  "level": 1,
+  "xpReward": 10,
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "multipleChoice",
+      "question": "How do you say 'Hello' in Hindi?",
+      "options": ["नमस्ते", "धन्यवाद", "अलविदा", "हाँ"],
+      "correctAnswer": "नमस्ते",
+      "translation": "Namaste",
+      "audioFile": "namaste.mp3",
+      "explanation": "नमस्ते (Namaste) is a respectful greeting in Hindi."
+    },
+    {
+      "id": "ex2",
+      "type": "translation",
+      "questionText": "नमस्ते",
+      "questionAudio": "namaste.mp3",
+      "wordBank": ["Hello", "Goodbye", "Thank", "you", "Yes"],
+      "correctAnswer": "Hello",
+      "explanation": "नमस्ते means Hello or a respectful greeting."
+    },
+    {
+      "id": "ex3",
+      "type": "multipleChoice",
+      "question": "What does 'धन्यवाद' mean?",
+      "options": ["Hello", "Thank you", "Goodbye", "Please"],
+      "correctAnswer": "Thank you",
+      "translation": "Dhanyavad",
+      "audioFile": "dhanyavad.mp3",
+      "explanation": "धन्यवाद (Dhanyavad) means Thank you."
+    },
+    {
+      "id": "ex4",
+      "type": "listening",
+      "question": "Listen and select the correct translation",
+      "audioFile": "namaste.mp3",
+      "options": ["Hello", "Goodbye", "Thank you", "Yes"],
+      "correctAnswer": "Hello",
+      "explanation": "The audio says 'Namaste' which means Hello."
+    },
+    {
+      "id": "ex5",
+      "type": "matching",
+      "question": "Match the Hindi words with their English translations",
+      "pairs": [
+        { "hindi": "नमस्ते", "english": "Hello" },
+        { "hindi": "धन्यवाद", "english": "Thank you" },
+        { "hindi": "अलविदा", "english": "Goodbye" },
+        { "hindi": "हाँ", "english": "Yes" }
+      ],
+      "explanation": "Match each Hindi word with its correct English meaning."
+    },
+    {
+      "id": "ex6",
+      "type": "fillInBlank",
+      "question": "Complete the sentence: मैं ___ हूँ (I am fine)",
+      "options": ["ठीक", "नमस्ते", "धन्यवाद", "हाँ"],
+      "correctAnswer": "ठीक",
+      "explanation": "ठीक (Theek) means fine or okay."
+    },
+    {
+      "id": "ex7",
+      "type": "multipleChoice",
+      "question": "How do you say 'Goodbye' in Hindi?",
+      "options": ["नमस्ते", "धन्यवाद", "अलविदा", "हाँ"],
+      "correctAnswer": "अलविदा",
+      "translation": "Alvida",
+      "audioFile": "alvida.mp3",
+      "explanation": "अलविदा (Alvida) means Goodbye."
+    },
+    {
+      "id": "ex8",
+      "type": "translation",
+      "questionText": "मैं ठीक हूँ",
+      "questionAudio": "main_theek_hoon.mp3",
+      "wordBank": ["I", "am", "fine", "Hello", "Thank", "you"],
+      "correctAnswer": "I am fine",
+      "explanation": "मैं ठीक हूँ means I am fine."
+    },
+    {
+      "id": "ex9",
+      "type": "listening",
+      "question": "Listen and type what you hear",
+      "audioFile": "dhanyavad.mp3",
+      "correctAnswer": "धन्यवाद",
+      "explanation": "The audio says 'Dhanyavad' which means Thank you."
+    },
+    {
+      "id": "ex10",
+      "type": "multipleChoice",
+      "question": "What is the Hindi word for 'Yes'?",
+      "options": ["नमस्ते", "धन्यवाद", "अलविदा", "हाँ"],
+      "correctAnswer": "हाँ",
+      "translation": "Haan",
+      "audioFile": "haan.mp3",
+      "explanation": "हाँ (Haan) means Yes."
+    }
+  ]
+}
+
