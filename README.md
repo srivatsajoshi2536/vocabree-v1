@@ -170,7 +170,8 @@ This project is for educational purposes (Final Year Project).
 
 ## 👥 Contributors
 
-- Your Name Here
+- SRIVATSA JOSHI
+- V AISHWARYA
 
 ## 🙏 Acknowledgments
 
