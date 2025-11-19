@@ -60,16 +60,19 @@ const styles = StyleSheet.create({
   },
   track: {
     width: '100%',
-    borderRadius: 4,
-    overflow: 'hidden',
+    borderRadius: 0, // No rounded corners
+    overflow: 'visible',
+    borderWidth: 3,
+    borderColor: COLORS.border,
   },
   fill: {
-    borderRadius: 4,
+    borderRadius: 0,
   },
   label: {
     ...TYPOGRAPHY.caption,
-    marginTop: 4,
+    marginTop: 6,
     textAlign: 'right',
+    fontWeight: '800',
   },
 });
 

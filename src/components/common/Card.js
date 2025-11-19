@@ -31,13 +31,16 @@ const Card = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.cardBackground,
-    borderRadius: 8,
-    padding: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    borderRadius: 0, // No rounded corners - neobrutalism!
+    padding: 20,
+    borderWidth: 4, // Thick black border
+    borderColor: COLORS.border,
+    // Offset shadow for neobrutalism effect
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 6, height: 6 }, // Offset shadow
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 0, // Use shadow instead
   },
 });
 

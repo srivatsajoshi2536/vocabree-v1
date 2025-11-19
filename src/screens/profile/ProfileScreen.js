@@ -321,10 +321,10 @@ const ProfileScreen = ({ navigation }) => {
         </Card>
 
         {/* Logout Button */}
-        <TouchableOpacity onPress={handleLogout} style={[styles.logoutButton, { backgroundColor: colors.error + '20' }]}>
-          <Ionicons name="log-out-outline" size={20} color={colors.error} />
-          <Text style={[styles.logoutText, { color: colors.error }]}>
-            {isPreviewMode ? 'Exit Preview Mode' : 'Logout'}
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+          <Ionicons name="log-out-outline" size={22} color={COLORS.error} />
+          <Text style={styles.logoutText}>
+            {isPreviewMode ? 'EXIT PREVIEW MODE' : 'LOGOUT'}
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -356,6 +356,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...TYPOGRAPHY.h1,
+    fontWeight: '900',
   },
   settingsButton: {
     padding: 8,
@@ -375,9 +376,15 @@ const styles = StyleSheet.create({
   avatar: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    borderRadius: 0, // Square avatar - neobrutalism!
+    borderWidth: 4,
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   avatarText: {
     ...TYPOGRAPHY.h1,
@@ -408,11 +415,16 @@ const styles = StyleSheet.create({
   },
   usernameInput: {
     ...TYPOGRAPHY.h2,
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 12,
+    borderWidth: 4,
+    borderRadius: 0,
+    padding: 16,
     marginBottom: 12,
     textAlign: 'center',
+    borderColor: COLORS.border,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   usernameEditActions: {
     flexDirection: 'row',
@@ -421,8 +433,15 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     paddingHorizontal: 20,
-    paddingVertical: 8,
-    borderRadius: 8,
+    paddingVertical: 12,
+    borderRadius: 0,
+    borderWidth: 3,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.white,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   cancelButtonText: {
     ...TYPOGRAPHY.body,
@@ -430,8 +449,14 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     paddingHorizontal: 20,
-    paddingVertical: 8,
-    borderRadius: 8,
+    paddingVertical: 12,
+    borderRadius: 0,
+    borderWidth: 3,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   saveButtonText: {
     ...TYPOGRAPHY.body,
@@ -596,16 +621,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.error + '20',
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 16,
+    backgroundColor: COLORS.white,
+    padding: 18,
+    borderRadius: 0,
+    marginTop: 20,
+    borderWidth: 4,
+    borderColor: COLORS.error,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    minHeight: 56,
   },
   logoutText: {
-    ...TYPOGRAPHY.body,
+    ...TYPOGRAPHY.button,
     color: COLORS.error,
-    marginLeft: 8,
-    fontWeight: '600',
+    marginLeft: 10,
+    fontWeight: '800',
+    fontSize: 16,
   },
 });
 

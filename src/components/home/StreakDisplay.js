@@ -32,14 +32,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 8,
+    backgroundColor: COLORS.white,
+    borderWidth: 3,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   icon: {
-    marginRight: 4,
+    marginRight: 8,
   },
   streakText: {
     ...TYPOGRAPHY.h3,
     color: COLORS.streakFire,
-    fontWeight: '700',
+    fontWeight: '900',
   },
 });
 

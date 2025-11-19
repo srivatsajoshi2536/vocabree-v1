@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    padding: 16,
-    paddingBottom: 100,
+    padding: 20,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,
@@ -159,17 +159,28 @@ const styles = StyleSheet.create({
   emptyText: {
     ...TYPOGRAPHY.body,
     color: COLORS.textSecondary,
+    fontWeight: '700',
   },
   header: {
-    marginBottom: 20,
+    marginBottom: 24,
+    padding: 16,
+    backgroundColor: COLORS.white,
+    borderWidth: 4,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   sectionTitle: {
     ...TYPOGRAPHY.h2,
     marginBottom: 8,
+    fontWeight: '900',
   },
   sectionSubtitle: {
     ...TYPOGRAPHY.bodySmall,
     color: COLORS.textSecondary,
+    fontWeight: '700',
   },
 });
 

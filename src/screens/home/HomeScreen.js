@@ -179,24 +179,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: 20,
     backgroundColor: COLORS.white,
-    borderBottomWidth: 1,
+    borderBottomWidth: 4, // Thick border
     borderBottomColor: COLORS.border,
   },
   profileButton: {
     alignItems: 'center',
   },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 56, // Bigger for neobrutalism
+    height: 56,
+    borderRadius: 0, // Square avatar - playful!
+    borderWidth: 4,
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   avatarText: {
     ...TYPOGRAPHY.h3,
     color: COLORS.white,
+    fontWeight: '900',
   },
   headerCenter: {
     alignItems: 'center',
@@ -204,7 +212,8 @@ const styles = StyleSheet.create({
   streakLabel: {
     ...TYPOGRAPHY.caption,
     color: COLORS.textSecondary,
-    marginTop: 4,
+    marginTop: 6,
+    fontWeight: '700',
   },
   headerRight: {
     alignItems: 'flex-end',
@@ -212,78 +221,91 @@ const styles = StyleSheet.create({
   xpContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 8,
+    backgroundColor: COLORS.white,
+    borderWidth: 3,
+    borderColor: COLORS.border,
   },
   xpText: {
     ...TYPOGRAPHY.h4,
-    marginLeft: 4,
+    marginLeft: 6,
     color: COLORS.textPrimary,
+    fontWeight: '900',
   },
   xpLabel: {
     ...TYPOGRAPHY.caption,
     color: COLORS.textSecondary,
-    marginTop: 4,
+    marginTop: 6,
+    fontWeight: '700',
   },
   languageSelector: {
     backgroundColor: COLORS.white,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
+    paddingVertical: 16,
+    borderBottomWidth: 4,
     borderBottomColor: COLORS.border,
   },
   languageButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginHorizontal: 6,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 0, // No rounded corners
+    marginHorizontal: 8,
     backgroundColor: COLORS.background,
+    borderWidth: 3,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   languageText: {
     ...TYPOGRAPHY.body,
     color: COLORS.textPrimary,
+    fontWeight: '700',
   },
   languageTextActive: {
     color: COLORS.white,
-    fontWeight: '600',
+    fontWeight: '900',
   },
   levelContainer: {
     backgroundColor: COLORS.white,
-    padding: 16,
-    borderBottomWidth: 1,
+    padding: 20,
+    borderBottomWidth: 4,
     borderBottomColor: COLORS.border,
   },
   levelInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   levelLabel: {
     ...TYPOGRAPHY.h4,
+    fontWeight: '900',
   },
   levelProgress: {
     ...TYPOGRAPHY.bodySmall,
     color: COLORS.textSecondary,
+    fontWeight: '700',
   },
   levelBar: {
-    height: 8,
-    backgroundColor: COLORS.border,
-    borderRadius: 4,
-    overflow: 'hidden',
+    height: 16, // Thicker bar
+    backgroundColor: COLORS.background,
+    borderRadius: 0, // No rounded corners
+    overflow: 'visible',
+    borderWidth: 3,
+    borderColor: COLORS.border,
   },
   levelBarFill: {
     height: '100%',
-    borderRadius: 4,
+    borderRadius: 0,
   },
   fabContainer: {
     position: 'absolute',
-    bottom: 20,
-    left: 16,
-    right: 16,
+    bottom: 24,
+    left: 20,
+    right: 20,
   },
   fabButton: {
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    // Neobrutalism shadow already in Button component
   },
 });
 

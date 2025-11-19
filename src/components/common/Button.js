@@ -63,34 +63,39 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    height: 48,
+    height: 56, // Taller for neobrutalism
     minWidth: 120,
-    borderRadius: 8,
+    borderRadius: 0, // No rounded corners - neobrutalism!
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    paddingHorizontal: 32,
+    borderWidth: 4, // Thick border
+    borderColor: COLORS.border,
+    // Offset shadow for neobrutalism effect
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 6, height: 6 }, // Offset shadow
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 0, // Use shadow instead
   },
   primary: {
-    backgroundColor: COLORS.success,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.border,
   },
   secondary: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.border,
   },
   outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: COLORS.primary,
-    elevation: 0,
-    shadowOpacity: 0,
+    backgroundColor: COLORS.white,
+    borderWidth: 4,
+    borderColor: COLORS.border,
+    shadowOffset: { width: 4, height: 4 },
   },
   disabled: {
-    backgroundColor: COLORS.border,
-    opacity: 0.6,
+    backgroundColor: COLORS.skillLocked,
+    borderColor: COLORS.border,
+    opacity: 0.7,
   },
   text: {
     ...TYPOGRAPHY.button,

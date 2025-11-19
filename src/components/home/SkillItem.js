@@ -121,43 +121,52 @@ const SkillItem = ({
 
 const styles = StyleSheet.create({
   skillCard: {
-    marginBottom: 12,
-    padding: 16,
+    marginBottom: 16, // More spacing
+    padding: 20,
   },
   currentSkill: {
-    borderWidth: 2,
+    borderWidth: 5, // Thicker border for current skill
     borderColor: COLORS.primary,
-    elevation: 4,
+    shadowOffset: { width: 8, height: 8 }, // More pronounced shadow
   },
   lockedSkill: {
-    opacity: 0.6,
+    opacity: 0.7,
+    backgroundColor: COLORS.background,
   },
   skillContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   iconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 64, // Bigger icon
+    height: 64,
+    borderRadius: 0, // Square icon - playful!
+    borderWidth: 4,
+    borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 20,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   iconEmoji: {
-    fontSize: 28,
+    fontSize: 32, // Bigger emoji
   },
   skillInfo: {
     flex: 1,
   },
   skillName: {
     ...TYPOGRAPHY.h4,
-    marginBottom: 4,
+    marginBottom: 6,
+    fontWeight: '900',
   },
   skillDescription: {
     ...TYPOGRAPHY.bodySmall,
     color: COLORS.textSecondary,
-    marginBottom: 8,
+    marginBottom: 12,
+    fontWeight: '600',
   },
   progressContainer: {
     flexDirection: 'row',
@@ -165,27 +174,34 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     flex: 1,
-    height: 6,
-    backgroundColor: COLORS.border,
-    borderRadius: 3,
-    marginRight: 8,
-    overflow: 'hidden',
+    height: 12, // Thicker progress bar
+    backgroundColor: COLORS.background,
+    borderRadius: 0, // No rounded corners
+    marginRight: 12,
+    overflow: 'visible',
+    borderWidth: 3,
+    borderColor: COLORS.border,
   },
   progressFill: {
     height: '100%',
-    borderRadius: 3,
+    borderRadius: 0,
   },
   progressText: {
     ...TYPOGRAPHY.caption,
     color: COLORS.textSecondary,
-    minWidth: 40,
+    minWidth: 50,
+    fontWeight: '800',
   },
   crownContainer: {
     flexDirection: 'row',
-    marginLeft: 8,
+    marginLeft: 12,
+    padding: 6,
+    borderWidth: 2,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.white,
   },
   crown: {
-    marginLeft: 2,
+    marginLeft: 4,
   },
 });
 
