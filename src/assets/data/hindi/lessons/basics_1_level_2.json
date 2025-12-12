@@ -1,0 +1,56 @@
+{
+  "lessonId": "basics_1_l2",
+  "skillId": "basics_1",
+  "level": 2,
+  "xpReward": 10,
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "multipleChoice",
+      "question": "How do you say 'Thank you' in Hindi?",
+      "options": ["नमस्ते", "धन्यवाद", "अलविदा", "हाँ"],
+      "correctAnswer": "धन्यवाद",
+      "translation": "Dhanyavad",
+      "audioFile": "dhanyavad.mp3",
+      "explanation": "धन्यवाद (Dhanyavad) means Thank you in Hindi."
+    },
+    {
+      "id": "ex2",
+      "type": "translation",
+      "questionText": "मैं ठीक हूँ",
+      "questionAudio": "main_theek_hoon.mp3",
+      "wordBank": ["I", "am", "fine", "Hello", "Thank", "you"],
+      "correctAnswer": "I am fine",
+      "explanation": "मैं ठीक हूँ means I am fine."
+    },
+    {
+      "id": "ex3",
+      "type": "fillInBlank",
+      "question": "Complete: मैं ___ हूँ (I am fine)",
+      "options": ["ठीक", "नमस्ते", "धन्यवाद", "हाँ"],
+      "correctAnswer": "ठीक",
+      "explanation": "ठीक (Theek) means fine or okay."
+    },
+    {
+      "id": "ex4",
+      "type": "listening",
+      "question": "Listen and select the correct translation",
+      "audioFile": "alvida.mp3",
+      "options": ["Hello", "Goodbye", "Thank you", "Yes"],
+      "correctAnswer": "Goodbye",
+      "explanation": "The audio says 'Alvida' which means Goodbye."
+    },
+    {
+      "id": "ex5",
+      "type": "matching",
+      "question": "Match the Hindi words with their English translations",
+      "pairs": [
+        { "hindi": "नमस्ते", "english": "Hello" },
+        { "hindi": "धन्यवाद", "english": "Thank you" },
+        { "hindi": "अलविदा", "english": "Goodbye" }
+      ],
+      "explanation": "Match each Hindi word with its correct English meaning."
+    }
+  ]
+}
+

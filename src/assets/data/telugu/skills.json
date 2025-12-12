@@ -1,0 +1,55 @@
+{
+  "skills": [
+    {
+      "id": "basics_1",
+      "name": "Basics 1",
+      "description": "Learn basic greetings and introductions",
+      "icon": "👋",
+      "position": 1,
+      "requiredSkills": [],
+      "levels": 5,
+      "lessonsPerLevel": 4
+    },
+    {
+      "id": "basics_2",
+      "name": "Basics 2",
+      "description": "Common phrases and questions",
+      "icon": "💬",
+      "position": 2,
+      "requiredSkills": ["basics_1"],
+      "levels": 5,
+      "lessonsPerLevel": 4
+    },
+    {
+      "id": "numbers",
+      "name": "Numbers",
+      "description": "Learn numbers 1-100",
+      "icon": "🔢",
+      "position": 3,
+      "requiredSkills": ["basics_1"],
+      "levels": 5,
+      "lessonsPerLevel": 4
+    },
+    {
+      "id": "family",
+      "name": "Family",
+      "description": "Family members and relationships",
+      "icon": "👨‍👩‍👧‍👦",
+      "position": 4,
+      "requiredSkills": ["basics_2"],
+      "levels": 5,
+      "lessonsPerLevel": 4
+    },
+    {
+      "id": "food",
+      "name": "Food & Drinks",
+      "description": "Food items and beverages",
+      "icon": "🍽️",
+      "position": 5,
+      "requiredSkills": ["basics_2"],
+      "levels": 5,
+      "lessonsPerLevel": 4
+    }
+  ]
+}
+
