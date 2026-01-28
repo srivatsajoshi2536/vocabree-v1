@@ -134,7 +134,7 @@ export default function OcrTranslateScreen({ navigation }) {
 
   const handleSpeak = async (text, wordKey = null) => {
     if (!text || text === '❌ Failed') return;
-    
+
     try {
       setCurrentlyPlaying(wordKey);
       await audioService.playTTS(text, selectedLanguage || 'hindi', { rate: 0.9 });
@@ -147,10 +147,10 @@ export default function OcrTranslateScreen({ navigation }) {
 
   const handlePlayAll = async () => {
     if (Object.keys(translations).length === 0) return;
-    
+
     setPlayingAll(true);
     const translationEntries = Object.entries(translations);
-    
+
     for (let i = 0; i < translationEntries.length; i++) {
       const [original, translated] = translationEntries[i];
       if (translated && translated !== '❌ Failed') {
@@ -164,7 +164,7 @@ export default function OcrTranslateScreen({ navigation }) {
         }
       }
     }
-    
+
     setCurrentlyPlaying(null);
     setPlayingAll(false);
   };
@@ -207,7 +207,7 @@ export default function OcrTranslateScreen({ navigation }) {
             <Text style={styles.instructionsIcon}>📸</Text>
             <Text style={styles.instructionsTitle}>How it works</Text>
             <Text style={styles.instructionsText}>
-              1. Take a photo or select from gallery{'\n'}
+              1. Select an image from gallery{'\n'}
               2. We'll extract all text from the image{'\n'}
               3. Each word gets translated to {languageInfo.name}{'\n'}
               4. Tap 🔊 to hear the pronunciation
@@ -219,15 +219,9 @@ export default function OcrTranslateScreen({ navigation }) {
         {!imageUri && (
           <View style={styles.buttonContainer}>
             <Button
-              title="📷 Take Photo"
-              onPress={() => pickImage(true)}
-              style={[styles.actionButton, { backgroundColor: languageColor }]}
-            />
-            <Button
               title="🖼️ Choose from Gallery"
-              variant="outline"
               onPress={() => pickImage(false)}
-              style={styles.actionButton}
+              style={[styles.actionButton, { backgroundColor: languageColor }]}
             />
           </View>
         )}
@@ -287,10 +281,10 @@ export default function OcrTranslateScreen({ navigation }) {
                   { backgroundColor: playingAll ? COLORS.border : languageColor },
                 ]}
               >
-                <Ionicons 
-                  name={playingAll ? "pause" : "play"} 
-                  size={18} 
-                  color={COLORS.white} 
+                <Ionicons
+                  name={playingAll ? "pause" : "play"}
+                  size={18}
+                  color={COLORS.white}
                 />
                 <Text style={styles.playAllText}>
                   {playingAll ? 'Playing...' : 'Play All'}
@@ -317,19 +311,19 @@ export default function OcrTranslateScreen({ navigation }) {
                   onPress={() => handleSpeak(translated, original)}
                   disabled={playingAll || currentlyPlaying === original}
                   style={[
-                    styles.speakButton, 
-                    { 
-                      backgroundColor: currentlyPlaying === original 
-                        ? languageColor 
+                    styles.speakButton,
+                    {
+                      backgroundColor: currentlyPlaying === original
+                        ? languageColor
                         : languageColor + '20',
                       opacity: playingAll ? 0.5 : 1,
                     }
                   ]}
                 >
-                  <Ionicons 
-                    name={currentlyPlaying === original ? "pause" : "volume-high"} 
-                    size={20} 
-                    color={currentlyPlaying === original ? COLORS.white : languageColor} 
+                  <Ionicons
+                    name={currentlyPlaying === original ? "pause" : "volume-high"}
+                    size={20}
+                    color={currentlyPlaying === original ? COLORS.white : languageColor}
                   />
                 </TouchableOpacity>
               </View>

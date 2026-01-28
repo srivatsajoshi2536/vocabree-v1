@@ -1,0 +1,24 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam component {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+component OCRTranslationSystem {
+    component "OcrTranslateScreen" as OcrScreen #4A90E2
+    component "OCRService" as OCR #50C878
+    component "TranslationService" as TS #FF6B6B
+    component "FileSystem" as FS #FFD93D
+    component "ExpoCamera" as Camera #9B59B6
+    
+    OcrScreen --> OCR: uses
+    OcrScreen --> TS: uses
+    OcrScreen --> FS: uses
+    OcrScreen --> Camera: uses
+    OCR --> FS: uses
+}
+
+@enduml

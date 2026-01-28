@@ -1,0 +1,131 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam class {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+    ArrowColor #2E5C8A
+}
+
+class LessonScreen {
+    -currentExercise: number
+    -hearts: number
+    -correctAnswers: number
+    -lessonData: Lesson
+    -incorrectExercises: Exercise[]
+    -lessonFailed: boolean
+    +handleAnswer(isCorrect, exercise, userAnswer): void
+    +completeLesson(): Promise
+    +handleRestart(): void
+    +renderExercise(): ReactComponent
+    -loadLessonData(): void
+}
+
+class Exercise {
+    +id: string
+    +type: ExerciseType
+    +question: string
+    +questionAudio: string
+    +options: string[]
+    +correctAnswer: string
+    +explanation: string
+    +audioText: string
+}
+
+class MultipleChoiceRenderer {
+    -selectedOption: string
+    -showFeedback: boolean
+    -isPlayingAudio: boolean
+    +handleSelect(option): void
+    +handlePlayAudio(): Promise
+}
+
+class TranslationRenderer {
+    -selectedWords: string[]
+    -availableWords: string[]
+    -showFeedback: boolean
+    +handleWordSelect(word): void
+    +handleRemoveWord(word, index): void
+    +handleCheckAnswer(): void
+    +handleClear(): void
+}
+
+class ListeningRenderer {
+    -selectedOption: string
+    -isPlaying: boolean
+    -isSlowMode: boolean
+    +handleSelect(option): void
+    +handlePlay(): Promise
+    +handleSlowToggle(): void
+}
+
+class MatchingRenderer {
+    -selectedLeft: Item
+    -selectedRight: Item
+    -matchedPairs: Pair[]
+    +handleLeftSelect(item, index): void
+    +handleRightSelect(item, index): void
+    -checkMatch(): void
+}
+
+class FillInBlankRenderer {
+    -selectedOption: string
+    -showFeedback: boolean
+    +handleSelect(option): void
+}
+
+class LessonService {
+    -lessonsCache: Map<string, Lesson>
+    +getLesson(languageId, skillId, level): Lesson
+    +getVocabulary(languageId, skillId, level): Vocabulary
+    +getEnglishTranslation(word, languageId): string
+    +generatePracticeLesson(languageId, skillId, level): Lesson
+    +getNextLesson(languageId, skillId, level): Lesson
+    -generatePlaceholderLesson(): Lesson
+}
+
+class Lesson {
+    +lessonId: string
+    +skillId: string
+    +level: number
+    +xpReward: number
+    +exercises: Exercise[]
+}
+
+class ProgressContext {
+    -progress: Map<string, Progress>
+    +awardXP(languageId, xp, bonusXP): Promise
+    +updateSkillProgress(languageId, skillId, level): Promise
+    +updateStreak(languageId): Promise
+    +getProgress(languageId): Progress
+}
+
+class AudioService {
+    -soundCache: Map
+    -currentSound: Sound
+    -volume: number
+    -soundEnabled: boolean
+    +playSound(audioFile, languageId): Promise
+    +playText(text, languageId): Promise
+    +stopAll(): Promise
+}
+
+LessonScreen "1" *-- " "*" Exercise: contains
+LessonScreen --> MultipleChoiceRenderer: uses
+LessonScreen --> TranslationRenderer: uses
+LessonScreen --> ListeningRenderer: uses
+LessonScreen --> MatchingRenderer: uses
+LessonScreen --> FillInBlankRenderer: uses
+LessonScreen --> LessonService: loads from
+LessonScreen --> ProgressContext: updates
+LessonScreen --> AudioService: uses
+
+LessonService --> Lesson: creates
+Lesson "1" *-- "*" Exercise: contains
+
+MultipleChoiceRenderer --> AudioService: uses
+TranslationRenderer --> AudioService: uses
+ListeningRenderer --> AudioService: uses
+
+@enduml

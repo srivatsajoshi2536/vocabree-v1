@@ -1,0 +1,63 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam usecase {
+    BackgroundColor #FF6B6B
+    BorderColor #C92A2A
+    FontColor #FFFFFF
+}
+skinparam actor {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+skinparam component {
+    BackgroundColor #50C878
+    BorderColor #2D8659
+    FontColor #FFFFFF
+}
+
+actor "👤 Language Learner" as Learner #4A90E2
+actor "👨‍🏫 Teacher/System" as Teacher #9B59B6
+
+rectangle "📚 Language Learning System" {
+    usecase "Start Lesson" as UC1 #FF6B6B
+    usecase "Complete Exercise" as UC2 #FF6B6B
+    usecase "Listen to Audio" as UC3 #FF6B6B
+    usecase "Practice Skills" as UC4 #FF6B6B
+    usecase "View Learning Progress" as UC5 #FF6B6B
+    usecase "Earn Experience Points" as UC6 #FF6B6B
+    usecase "Maintain Daily Streak" as UC7 #FF6B6B
+    usecase "Unlock New Skills" as UC8 #FF6B6B
+    usecase "Manage Lesson Content" as UC9 #FF6B6B
+    usecase "Track Student Performance" as UC10 #FF6B6B
+    
+    component "Lesson Service" as LS #50C878
+    component "Audio Service" as AS #50C878
+    component "Progress Context" as PC #50C878
+    database "Database" as DB #E74C3C
+}
+
+Learner --> UC1
+Learner --> UC2
+Learner --> UC3
+Learner --> UC4
+Learner --> UC5
+Learner --> UC6
+Learner --> UC7
+Learner --> UC8
+Teacher --> UC9
+Teacher --> UC10
+
+UC1 --> LS
+UC2 --> PC
+UC3 --> AS
+UC4 --> LS
+UC5 --> PC
+UC6 --> PC
+UC7 --> PC
+UC8 --> PC
+UC9 --> DB
+UC10 --> DB
+
+@enduml

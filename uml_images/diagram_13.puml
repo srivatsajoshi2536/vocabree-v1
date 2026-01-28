@@ -1,0 +1,71 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam class {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+class OcrTranslateScreen {
+    -imageUri: string
+    -extractedText: string
+    -translations: Map<string, string>
+    -loading: boolean
+    -error: string
+    +handleCaptureImage(): Promise
+    +handleSelectImage(): Promise
+    +handleExtractText(): Promise
+    +handleTranslate(): Promise
+    +handleCopyToClipboard(): void
+    +handleShare(): void
+    -processImage(uri): Promise
+    -tokenizeText(text): string[]
+}
+
+class OCRService {
+    -apiKey: string
+    +extractTextFromImage(imageUri, apiKey): Promise<string>
+    +extractTextWithGoogleVision(imageUri, apiKey): Promise<string>
+    -validateAPIKey(apiKey): boolean
+    -parseOCRResponse(response): string
+}
+
+class TranslationService {
+    -translationCache: Map
+    -lastRequestTime: number
+    +translateWord(word, targetLang): Promise<string>
+    +clearTranslationCache(): void
+    -translateWithMyMemory(word, lang): Promise
+    -translateWithLibreTranslate(word, lang): Promise
+}
+
+class FileSystem {
+    +readAsStringAsync(uri, encoding): Promise<string>
+}
+
+class ImageManipulator {
+    +manipulateAsync(uri, actions): Promise
+    +resize(uri, width, height): Promise
+}
+
+class Clipboard {
+    +setString(text): Promise
+    +getString(): Promise<string>
+}
+
+class ExpoCamera {
+    +launchCameraAsync(options): Promise
+    +launchImageLibraryAsync(options): Promise
+}
+
+OcrTranslateScreen --> OCRService: uses
+OcrTranslateScreen --> TranslationService: uses
+OcrTranslateScreen --> FileSystem: uses
+OcrTranslateScreen --> ImageManipulator: uses
+OcrTranslateScreen --> Clipboard: uses
+OcrTranslateScreen --> ExpoCamera: uses
+OCRService --> FileSystem: uses
+TranslationService --> TranslationCache: manages
+
+@enduml

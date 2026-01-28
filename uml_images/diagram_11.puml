@@ -1,0 +1,60 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam participant {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+participant "User" as U #4A90E2
+participant "OcrTranslateScreen" as OS #50C878
+participant "Expo Camera" as Camera #FF6B6B
+participant "FileSystem" as FS #FFD93D
+participant "OCRService" as OCR #9B59B6
+participant "OCR.space API" as API #E74C3C
+participant "TranslationService" as TS #2C3E50
+participant "TranslationCache" as Cache #FF6B6B
+participant "MyMemory API" as MM #50C878
+
+U -> OS: Open OCR Screen
+U -> OS: Choose Image Source
+OS -> Camera: Launch Camera/Gallery
+Camera --> OS: Image URI
+
+OS -> OS: Process Image
+OS -> FS: readAsStringAsync(uri, base64)
+FS --> OS: Base64 String
+
+OS -> OCR: extractTextFromImage(imageUri)
+OCR -> OCR: Validate API Key
+OCR -> API: POST /parse/image (base64)
+API --> OCR: JSON Response
+OCR -> OCR: Parse Response
+OCR -> OCR: Extract ParsedText
+OCR --> OS: Extracted Text
+
+OS -> OS: Tokenize Text
+
+loop For each word
+    OS -> TS: translateWord(word, languageId)
+    TS -> TS: Normalize word
+    TS -> Cache: Check cache
+    
+    alt Cached
+        Cache --> TS: Cached translation
+    else Not Cached
+        TS -> MM: translateWithMyMemory(word, lang)
+        MM --> TS: Translation
+        TS -> Cache: Store in cache
+    end
+    
+    TS --> OS: Translation
+    OS -> OS: Add to results
+end
+
+OS --> U: Display Translations
+U -> OS: Copy/Share Action
+OS --> U: Action Complete
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam component {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+package "Presentation Layer" {
+    component [OcrTranslateScreen Component] as OS #4A90E2
+    component [Image Preview Component] as ImageView #50C878
+    component [Translation Results Component] as ResultView #FF6B6B
+}
+
+package "Business Logic Layer" {
+    component [OCRService] as OCR #FFD93D
+    component [TranslationService] as TS #9B59B6
+}
+
+package "External Services" {
+    component [OCR.space API] as OCRAPI #E74C3C
+    component [MyMemory API] as MyMemory #50C878
+    component [LibreTranslate API] as Libre #FF6B6B
+}
+
+package "Data Layer" {
+    database "Translation Cache" as Cache #9B59B6
+    database "Image Storage" as ImageStorage #E74C3C
+}
+
+OS --> ImageView
+OS --> ResultView
+OS --> OCR
+OS --> TS
+
+OCR --> OCRAPI
+TS --> MyMemory
+TS --> Libre
+TS --> Cache
+
+OS --> ImageStorage
+
+@enduml

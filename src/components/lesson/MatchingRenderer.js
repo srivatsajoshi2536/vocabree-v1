@@ -2,7 +2,7 @@
  * Matching Exercise Renderer
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../common/Button';
@@ -18,6 +18,14 @@ const MatchingRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isPr
   const [selectedRight, setSelectedRight] = useState(null);
   const [matchedPairs, setMatchedPairs] = useState([]);
   const [showFeedback, setShowFeedback] = useState(false);
+
+  // Reset state when exercise changes
+  useEffect(() => {
+    setSelectedLeft(null);
+    setSelectedRight(null);
+    setMatchedPairs([]);
+    setShowFeedback(false);
+  }, [exercise.id]);
 
   const pairs = exercise.pairs || [];
   const leftItems = pairs.map((p) => p.hindi || p.left);
@@ -51,22 +59,25 @@ const MatchingRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isPr
     );
 
     if (pair) {
-      // Correct match
-      setMatchedPairs([
-        ...matchedPairs,
-        { leftIndex, rightIndex, leftItem, rightItem },
-      ]);
+      // Correct match - use functional update to avoid stale closure
+      setMatchedPairs((prevMatchedPairs) => {
+        const newMatchedPairs = [
+          ...prevMatchedPairs,
+          { leftIndex, rightIndex, leftItem, rightItem },
+        ];
+        
+        // Check if all pairs matched
+        if (newMatchedPairs.length === pairs.length) {
+          setShowFeedback(true);
+          setTimeout(() => {
+            onAnswer(true, exercise, JSON.stringify(newMatchedPairs));
+          }, 1500);
+        }
+        
+        return newMatchedPairs;
+      });
       setSelectedLeft(null);
       setSelectedRight(null);
-
-      // Check if all pairs matched
-      if (matchedPairs.length + 1 === pairs.length) {
-        setShowFeedback(true);
-        const allMatches = [...matchedPairs, { leftIndex, rightIndex, leftItem, rightItem }];
-        setTimeout(() => {
-          onAnswer(true, exercise, JSON.stringify(allMatches));
-        }, 1500);
-      }
     } else {
       // Incorrect match - reset selection
       setSelectedLeft(null);

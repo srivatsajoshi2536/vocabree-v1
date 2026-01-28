@@ -1,0 +1,58 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+
+concise "User" as U
+concise "OcrTranslateScreen" as OS
+concise "OCRService" as OCR
+concise "OCR API" as API
+concise "TranslationService" as TS
+
+@0
+U is Idle
+OS is Idle
+OCR is Idle
+API is Idle
+TS is Idle
+
+@100
+U is Selecting Image
+OS is Processing
+
+@200
+OS -> OCR: Extract Text
+OCR is Processing
+
+@300
+OCR -> API: Send Request
+API is Processing
+
+@400
+API -> OCR: Response
+OCR is Parsing
+
+@500
+OCR -> OS: Extracted Text
+OS is Tokenizing
+
+@600
+OS -> TS: Translate Word 1
+TS is Translating
+
+@700
+TS -> OS: Translation 1
+OS is Processing
+
+@800
+OS -> TS: Translate Word 2
+TS is Translating
+
+@900
+TS -> OS: Translation 2
+OS is Displaying
+
+@1000
+U is Viewing Results
+OS is Displaying Results
+
+@enduml

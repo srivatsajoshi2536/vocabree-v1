@@ -3,7 +3,7 @@
  * Word bank construction
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../common/Button';
@@ -21,6 +21,14 @@ const TranslationRenderer = ({ exercise, onAnswer, languageId: propLanguageId, i
   const [availableWords, setAvailableWords] = useState(exercise.wordBank || []);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
+  // Reset state when exercise changes
+  useEffect(() => {
+    setSelectedWords([]);
+    setAvailableWords(exercise.wordBank || []);
+    setShowFeedback(false);
+    setIsPlayingAudio(false);
+  }, [exercise.id]);
 
   const handlePlayAudio = async () => {
     if (isPlayingAudio) {

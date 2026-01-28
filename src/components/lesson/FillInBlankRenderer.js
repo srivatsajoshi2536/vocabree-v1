@@ -2,7 +2,7 @@
  * Fill in the Blank Exercise Renderer
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Button from '../common/Button';
 import { COLORS } from '../../theme/colors';
@@ -16,6 +16,12 @@ const FillInBlankRenderer = ({ exercise, onAnswer, languageId: propLanguageId, i
   const [selectedOption, setSelectedOption] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
 
+  // Reset state when exercise changes
+  useEffect(() => {
+    setSelectedOption(null);
+    setShowFeedback(false);
+  }, [exercise.id]);
+
   // Split question to show blank
   const questionParts = exercise.question.split('___');
   const hasBlank = questionParts.length > 1;
@@ -28,7 +34,7 @@ const FillInBlankRenderer = ({ exercise, onAnswer, languageId: propLanguageId, i
     setShowFeedback(true);
     
     setTimeout(() => {
-      onAnswer(isCorrect, exercise, selectedOption);
+      onAnswer(isCorrect, exercise, option);
     }, 1500);
   };
 

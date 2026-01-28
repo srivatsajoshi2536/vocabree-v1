@@ -1,0 +1,53 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam state {
+    BackgroundColor #50C878
+    BorderColor #2D8659
+    FontColor #FFFFFF
+    StartColor #4A90E2
+    EndColor #9B59B6
+}
+
+[*] --> Idle: App Start
+Idle --> ChoosingSource: User Opens Screen
+ChoosingSource --> Capturing: Camera Selected
+ChoosingSource --> Selecting: Gallery Selected
+Capturing --> Processing: Image Captured
+Selecting --> Processing: Image Selected
+Processing --> Converting: Image Processed
+Converting --> SendingOCR: Base64 Converted
+SendingOCR --> WaitingOCR: Request Sent
+WaitingOCR --> OCRSuccess: Response Received
+WaitingOCR --> OCRError: Request Failed
+OCRError --> Retrying: User Retries
+Retrying --> SendingOCR
+OCRSuccess --> Extracting: Parse Response
+Extracting --> Tokenizing: Text Extracted
+Tokenizing --> Translating: Words Tokenized
+Translating --> TranslatingWord: Translate Next
+TranslatingWord --> CheckingCache: Word Ready
+CheckingCache --> UsingCache: Cached
+CheckingCache --> CallingAPI: Not Cached
+UsingCache --> Translating: Continue
+CallingAPI --> Translating: Continue
+Translating --> AllTranslated: All Done
+AllTranslated --> Displaying: Show Results
+Displaying --> UserAction: Results Shown
+UserAction --> Copying: User Copies
+UserAction --> Sharing: User Shares
+UserAction --> NewImage: New Image
+Copying --> Displaying: Return
+Sharing --> Displaying: Return
+NewImage --> ChoosingSource: Restart
+Displaying --> [*]: User Closes
+
+note right of Translating
+    States:
+    - extractedText
+    - translations
+    - loading
+    - error
+end note
+
+@enduml

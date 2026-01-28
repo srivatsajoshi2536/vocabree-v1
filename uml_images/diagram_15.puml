@@ -1,0 +1,36 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam node {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+node "Mobile Device" {
+    component "Vocabree App" as App #4A90E2
+    component "Device Camera" as Camera #9B59B6
+    database "Device Storage" as Storage #50C878
+}
+
+cloud "Cloud Services" {
+    component "OCR.space Cloud" as OCRAPI #FFD93D
+    component "MyMemory API Cloud" as MyMemory #E74C3C
+    component "LibreTranslate Cloud" as Libre #FF6B6B
+}
+
+node "Local Processing" {
+    component "Image Processing" as ImageProc #50C878
+    component "Text Processing" as TextProc #9B59B6
+}
+
+App --> Camera: Capture
+App --> Storage: Store
+App --> ImageProc: Process
+App --> OCRAPI: Extract
+App --> MyMemory: Translate
+App --> Libre: Fallback
+ImageProc --> OCRAPI: Enhanced Image
+TextProc --> MyMemory: Tokenized Text
+
+@enduml

@@ -1,0 +1,68 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam activity {
+    BackgroundColor #50C878
+    BorderColor #2D8659
+    FontColor #FFFFFF
+}
+skinparam arrow {
+    Color #2E5C8A
+}
+
+start
+:User Starts Lesson;
+:Select Language;
+:Select Skill;
+:Load Lesson Data;
+:Initialize: Hearts=3, Exercise=0, Correct=0;
+:Display Current Exercise;
+
+if (Exercise Type?) then (Multiple Choice)
+    :Multiple Choice Exercise;
+elseif (Translation) then
+    :Translation Exercise;
+elseif (Listening) then
+    :Listening Exercise;
+elseif (Matching) then
+    :Matching Exercise;
+else (Fill Blank)
+    :Fill in Blank Exercise;
+endif
+
+:User Provides Answer;
+:Validate Answer;
+
+if (Answer Correct?) then (yes)
+    :Play Success Sound;
+    :Increment Correct Count;
+    :Award XP Points;
+    :Move to Next Exercise;
+else (no)
+    :Play Error Sound;
+    :Decrement Heart;
+    :Track Incorrect Exercise;
+    if (Hearts = 0?) then (yes)
+        :Show Lesson Failed Screen;
+        if (User Restarts?) then (yes)
+            :Reset State;
+        else (no)
+            stop
+        endif
+    else (no)
+        :Move to Next Exercise;
+    endif
+endif
+
+if (All Exercises Complete?) then (no)
+    :Display Next Exercise;
+else (yes)
+    :Calculate Results: Accuracy, XP;
+    :Update Progress in Database;
+    :Update Daily Streak;
+    :Check for Achievements;
+    :Show Completion Screen;
+    stop
+endif
+
+@enduml

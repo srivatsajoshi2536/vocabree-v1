@@ -1,0 +1,69 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam activity {
+    BackgroundColor #50C878
+    BorderColor #2D8659
+    FontColor #FFFFFF
+}
+
+start
+:User Opens OCR Screen;
+if (Choose Image Source?) then (Camera)
+    :Open Camera;
+else (Gallery)
+    :Open Gallery;
+endif
+
+:Capture/Select Image;
+:Process Image: Resize, Enhance;
+:Convert Image to Base64;
+
+if (API Key Valid?) then (no)
+    :Show API Key Error;
+    stop
+endif
+
+:Send to OCR API;
+:Wait for API Response;
+
+if (Response Success?) then (no)
+    :Show OCR Error;
+    stop
+endif
+
+:Parse JSON Response;
+:Extract Text from Response;
+
+if (Text Found?) then (no)
+    :Show No Text Error;
+    stop
+endif
+
+:Tokenize Text into Words;
+:Initialize Translation Results;
+
+while (More Words?) is (yes)
+    :Translate Current Word;
+    if (Cached?) then (yes)
+        :Get from Cache;
+    else (no)
+        :Call Translation API;
+        :Cache Translation;
+    endif
+    :Add to Results;
+endwhile (no)
+
+:Display Translation Results;
+
+if (User Action?) then (Copy)
+    :Copy to Clipboard;
+elseif (Share) then
+    :Share Translation;
+elseif (New Image) then
+    :Process New Image;
+else (Close)
+    stop
+endif
+
+@enduml

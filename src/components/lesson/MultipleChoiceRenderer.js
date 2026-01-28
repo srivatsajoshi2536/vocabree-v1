@@ -2,7 +2,7 @@
  * Multiple Choice Exercise Renderer
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../common/Button';
@@ -19,6 +19,13 @@ const MultipleChoiceRenderer = ({ exercise, onAnswer, languageId: propLanguageId
   const [selectedOption, setSelectedOption] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
+  // Reset state when exercise changes
+  useEffect(() => {
+    setSelectedOption(null);
+    setShowFeedback(false);
+    setIsPlayingAudio(false);
+  }, [exercise.id]);
 
   const handlePlayAudio = async () => {
     if (isPlayingAudio) {
@@ -60,7 +67,7 @@ const MultipleChoiceRenderer = ({ exercise, onAnswer, languageId: propLanguageId
     setShowFeedback(true);
     
     setTimeout(() => {
-      onAnswer(isCorrect, exercise, selectedOption);
+      onAnswer(isCorrect, exercise, option);
     }, 1500);
   };
 

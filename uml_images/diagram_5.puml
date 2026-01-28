@@ -1,0 +1,40 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam component {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+component "LessonScreen" as LS #4A90E2
+component "MultipleChoiceRenderer" as MCR #50C878
+component "TranslationRenderer" as TR #50C878
+component "ListeningRenderer" as LR #50C878
+component "MatchingRenderer" as MR #50C878
+component "FillInBlankRenderer" as FBR #50C878
+component "AudioService" as AS #FFD93D
+component "ProgressContext" as PC #9B59B6
+component "LessonService" as LSvc #E74C3C
+
+LS "1: renderExercise" --> MCR
+LS "1: renderExercise" --> TR
+LS "1: renderExercise" --> LR
+LS "1: renderExercise" --> MR
+LS "1: renderExercise" --> FBR
+
+MCR "2: playAudio" --> AS
+TR "2: playAudio" --> AS
+LR "2: playAudio" --> AS
+
+MCR "3: onAnswer" --> LS
+TR "3: onAnswer" --> LS
+LR "3: onAnswer" --> LS
+MR "3: onAnswer" --> LS
+FBR "3: onAnswer" --> LS
+
+LS "4: awardXP" --> PC
+LS "5: getLesson" --> LSvc
+LSvc "6: getVocabulary" --> LSvc
+
+@enduml

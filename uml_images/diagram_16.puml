@@ -1,0 +1,45 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam package {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+package "vocabree" {
+    package "src" {
+        package "screens" {
+            package "ocr" {
+                file "OcrTranslateScreen.js" as OcrScreen #4A90E2
+            }
+        }
+        
+        package "services" {
+            file "ocrService.js" as OCRService #50C878
+            file "translationService.js" as TranslationService #FF6B6B
+        }
+        
+        package "utils" {
+            file "helpers.js" as Helpers #FFD93D
+        }
+    }
+    
+    package "node_modules" {
+        file "expo-camera" as ExpoCamera #9B59B6
+        file "expo-file-system" as ExpoFS #E74C3C
+        file "expo-clipboard" as ExpoClipboard #50C878
+        file "expo-image-manipulator" as ExpoImageManip #FF6B6B
+    }
+}
+
+OcrScreen --> OCRService
+OcrScreen --> TranslationService
+OcrScreen --> ExpoCamera
+OcrScreen --> ExpoFS
+OcrScreen --> ExpoClipboard
+OcrScreen --> ExpoImageManip
+OCRService --> ExpoFS
+TranslationService --> Helpers
+
+@enduml

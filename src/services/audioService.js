@@ -287,14 +287,17 @@ class AudioService {
   getAudioFilename(text, languageId) {
     if (!text) return null;
     
+    // Ensure text is a string
+    const textStr = String(text);
+    
     // If it's already a filename (contains .mp3), return as-is
-    if (text.includes('.mp3')) {
-      return text;
+    if (textStr.includes('.mp3')) {
+      return textStr;
     }
     
     // Check if it's native script and map to filename
     const languageMap = this.audioFileMap[languageId] || {};
-    const filename = languageMap[text];
+    const filename = languageMap[textStr];
     
     if (filename) {
       return filename;
@@ -302,7 +305,7 @@ class AudioService {
     
     // If not found in map, try to generate filename from text
     // Convert native script to transliteration (basic fallback)
-    return this.textToFilename(text);
+    return this.textToFilename(textStr);
   }
 
   /**
@@ -311,8 +314,11 @@ class AudioService {
   textToFilename(text) {
     if (!text) return null;
     
+    // Ensure text is a string
+    const textStr = String(text);
+    
     // Remove special characters, replace spaces with underscores
-    let filename = text
+    let filename = textStr
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '_')

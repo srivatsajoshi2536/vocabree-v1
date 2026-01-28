@@ -1,0 +1,42 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam node {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+node "Mobile Device - Android/iOS" {
+    component "Vocabree Mobile App" as App #4A90E2
+    database "Local Cache/AsyncStorage" as LocalCache #9B59B6
+}
+
+cloud "Cloud Services" {
+    component "Firebase Backend" as Firebase #50C878
+    component "EAS Build Service" as EAS #FFD93D
+}
+
+node "Firebase Services" {
+    component "Firebase Authentication" as Auth #E74C3C
+    database "Cloud Firestore" as Firestore #9B59B6
+    database "Cloud Storage" as Storage #FF6B6B
+}
+
+node "Content Delivery" {
+    component "Content CDN" as CDN #50C878
+    component "Audio Files CDN" as AudioCDN #FFD93D
+}
+
+App --> Auth: Authenticate
+App --> Firestore: Store Progress
+App --> LocalCache: Cache Data
+App --> AudioCDN: Load Audio
+App --> CDN: Load Lessons
+
+EAS --> App: Build & Deploy
+Firebase --> Auth
+Firebase --> Firestore
+Firebase --> Storage
+
+@enduml

@@ -262,18 +262,28 @@ class LessonService {
     const skillVocab = vocabularies[skillId];
     if (!skillVocab) {
       // Fallback to basics_1 if skill not found
-      return vocabularies.basics_1[1].english || vocabularies.basics_1[1].hindi;
+      const fallbackVocab = vocabularies.basics_1?.[1];
+      if (fallbackVocab) {
+        return languageId === 'english' 
+          ? (fallbackVocab.english || fallbackVocab.hindi)
+          : (fallbackVocab[languageId] || fallbackVocab.hindi);
+      }
+      // Ultimate fallback
+      return {};
     }
 
     const levelVocab = skillVocab[level] || skillVocab[1];
+    if (!levelVocab) {
+      return {};
+    }
     
     // If requesting English, return the english key from levelVocab
     if (languageId === 'english') {
-      return levelVocab.english || levelVocab.hindi;
+      return levelVocab.english || levelVocab.hindi || {};
     }
     
     // Return language-specific vocabulary
-    return levelVocab[languageId] || levelVocab.hindi;
+    return levelVocab[languageId] || levelVocab.hindi || {};
   }
 
   /**

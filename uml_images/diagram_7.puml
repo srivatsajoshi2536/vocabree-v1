@@ -1,0 +1,47 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam component {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+package "Presentation Layer" {
+    component [LessonScreen Component] as LS #4A90E2
+    component [MultipleChoiceRenderer] as MCR #50C878
+    component [TranslationRenderer] as TR #50C878
+    component [ListeningRenderer] as LR #50C878
+    component [MatchingRenderer] as MR #50C878
+    component [FillInBlankRenderer] as FBR #50C878
+}
+
+package "Business Logic Layer" {
+    component [LessonService] as LSvc #FFD93D
+    component [ProgressContext] as PC #9B59B6
+    component [AudioService] as AS #E74C3C
+}
+
+package "Data Layer" {
+    database "Lesson Data JSON" as LessonData #9B59B6
+    database "Progress Database" as ProgressDB #E74C3C
+    database "Audio MP3 Files" as AudioFiles #FF6B6B
+}
+
+LS --> MCR
+LS --> TR
+LS --> LR
+LS --> MR
+LS --> FBR
+LS --> LSvc
+LS --> PC
+
+MCR --> AS
+TR --> AS
+LR --> AS
+
+LSvc --> LessonData
+PC --> ProgressDB
+AS --> AudioFiles
+
+@enduml

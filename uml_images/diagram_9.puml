@@ -1,0 +1,41 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam usecase {
+    BackgroundColor #FF6B6B
+    BorderColor #C92A2A
+    FontColor #FFFFFF
+}
+skinparam actor {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+actor "👤 User" as User #4A90E2
+
+rectangle "📷 OCR Translation System" {
+    usecase "Capture Image with Camera" as UC1 #FF6B6B
+    usecase "Select Image from Gallery" as UC2 #FF6B6B
+    usecase "Extract Text from Image" as UC3 #FF6B6B
+    usecase "Translate Extracted Text" as UC4 #FF6B6B
+    usecase "View Translation Results" as UC5 #FF6B6B
+    usecase "Copy Translation to Clipboard" as UC6 #FF6B6B
+    
+    component "OCR.space API" as OCRAPI #FFD93D
+    component "Translation Service" as TS #9B59B6
+    database "Translation Cache" as Cache #E74C3C
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+
+UC3 --> OCRAPI
+UC4 --> TS
+UC4 --> Cache
+
+@enduml

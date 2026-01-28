@@ -1,0 +1,53 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam state {
+    BackgroundColor #50C878
+    BorderColor #2D8659
+    FontColor #FFFFFF
+    StartColor #4A90E2
+    EndColor #9B59B6
+}
+
+[*] --> Idle: App Start
+Idle --> SelectingLanguage: User Opens App
+SelectingLanguage --> SelectingSkill: Language Selected
+SelectingSkill --> LoadingLesson: Skill Selected
+LoadingLesson --> LessonReady: Lesson Loaded
+LessonReady --> ShowingExercise: Start Lesson
+ShowingExercise --> WaitingAnswer: Exercise Displayed
+WaitingAnswer --> ProcessingAnswer: User Answers
+ProcessingAnswer --> AnswerCorrect: Validation Pass
+ProcessingAnswer --> AnswerIncorrect: Validation Fail
+AnswerCorrect --> UpdatingProgress: Update XP
+AnswerIncorrect --> CheckingHearts: Check Hearts
+CheckingHearts --> ShowingExercise: Hearts > 0
+CheckingHearts --> LessonFailed: Hearts = 0
+UpdatingProgress --> MovingNext: Progress Updated
+MovingNext --> ShowingExercise: More Exercises
+MovingNext --> LessonComplete: All Done
+LessonComplete --> CalculatingResults: Compute Stats
+CalculatingResults --> UpdatingDatabase: Save Progress
+UpdatingDatabase --> ShowingCompletion: Show Results
+LessonFailed --> Restarting: User Clicks Restart
+Restarting --> LessonReady: Reset State
+ShowingCompletion --> [*]: User Closes
+
+note right of ShowingExercise
+    Exercise Types:
+    - Multiple Choice
+    - Translation
+    - Listening
+    - Matching
+    - Fill in Blank
+end note
+
+note right of UpdatingProgress
+    Updates:
+    - XP Points
+    - Level
+    - Streak
+    - Skill Progress
+end note
+
+@enduml

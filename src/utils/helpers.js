@@ -9,7 +9,19 @@ import { format, isToday, isYesterday, differenceInDays } from 'date-fns';
  */
 export const formatDate = (date, formatStr = 'MMM dd, yyyy') => {
   if (!date) return '';
-  const dateObj = date instanceof Date ? date : date.toDate();
+  
+  let dateObj;
+  if (date instanceof Date) {
+    dateObj = date;
+  } else if (date && typeof date.toDate === 'function') {
+    dateObj = date.toDate();
+  } else {
+    // Try to convert to Date if possible
+    dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) {
+      return ''; // Invalid date
+    }
+  }
   
   if (isToday(dateObj)) return 'Today';
   if (isYesterday(dateObj)) return 'Yesterday';
@@ -29,6 +41,9 @@ export const calculateLevel = (totalXP) => {
  * Calculate XP needed for next level
  */
 export const getXPForNextLevel = (currentLevel) => {
+  if (!currentLevel || currentLevel < 1) {
+    currentLevel = 1;
+  }
   const nextLevelXP = Math.pow(currentLevel + 1, 2) * 100;
   const currentLevelXP = Math.pow(currentLevel, 2) * 100;
   return nextLevelXP - currentLevelXP;
@@ -38,10 +53,15 @@ export const getXPForNextLevel = (currentLevel) => {
  * Calculate progress percentage for current level
  */
 export const getLevelProgress = (totalXP, currentLevel) => {
+  if (!totalXP || totalXP < 0) totalXP = 0;
+  if (!currentLevel || currentLevel < 1) currentLevel = 1;
+  
   const currentLevelXP = Math.pow(currentLevel, 2) * 100;
   const nextLevelXP = Math.pow(currentLevel + 1, 2) * 100;
   const progressXP = totalXP - currentLevelXP;
   const neededXP = nextLevelXP - currentLevelXP;
+  
+  if (neededXP <= 0) return 100; // Prevent division by zero
   
   return Math.min(100, Math.max(0, (progressXP / neededXP) * 100));
 };
@@ -52,9 +72,18 @@ export const getLevelProgress = (totalXP, currentLevel) => {
 export const shouldMaintainStreak = (lastActiveDate) => {
   if (!lastActiveDate) return false;
   
-  const lastDate = lastActiveDate instanceof Date 
-    ? lastActiveDate 
-    : lastActiveDate.toDate();
+  let lastDate;
+  if (lastActiveDate instanceof Date) {
+    lastDate = lastActiveDate;
+  } else if (lastActiveDate && typeof lastActiveDate.toDate === 'function') {
+    lastDate = lastActiveDate.toDate();
+  } else {
+    // Try to convert to Date if possible
+    lastDate = new Date(lastActiveDate);
+    if (isNaN(lastDate.getTime())) {
+      return false; // Invalid date
+    }
+  }
   
   const daysDiff = differenceInDays(new Date(), lastDate);
   return daysDiff <= 1; // Within 24 hours
@@ -87,7 +116,7 @@ export const isValidPassword = (password) => {
  * Generate unique ID
  */
 export const generateId = () => {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
 
 /**

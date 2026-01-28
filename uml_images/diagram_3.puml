@@ -1,0 +1,61 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam participant {
+    BackgroundColor #4A90E2
+    BorderColor #2E5C8A
+    FontColor #FFFFFF
+}
+
+participant "User" as U #4A90E2
+participant "LessonScreen" as LS #50C878
+participant "ExerciseRenderer" as ER #FF6B6B
+participant "AudioService" as AS #FFD93D
+participant "ProgressContext" as PC #9B59B6
+participant "LessonService" as LSvc #E74C3C
+participant "Firebase" as FB #2C3E50
+
+U -> LS: Start Lesson
+LS -> LSvc: getLesson(languageId, skillId, level)
+LSvc --> LS: Lesson Data
+LS -> ER: Render Exercise
+ER --> U: Display Exercise
+
+U -> ER: Select Answer
+ER -> ER: Validate Answer
+ER -> AS: playSuccessSound() or playErrorSound()
+AS --> ER: Sound Complete
+ER -> LS: onAnswer(isCorrect, exercise, userAnswer)
+
+alt Correct Answer
+    LS -> LS: Increment correctAnswers
+    LS -> PC: awardXP(languageId, baseXP, bonusXP)
+    PC -> PC: Calculate new level
+    PC -> FB: updateDoc(progress)
+    FB --> PC: Success
+    PC -> PC: Update streak
+    PC -> FB: updateDoc(userProfile)
+    FB --> PC: Success
+    PC --> LS: {success, leveledUp, newLevel}
+else Incorrect Answer
+    LS -> LS: Decrement hearts
+    LS -> LS: Add to incorrectExercises
+    alt Hearts = 0
+        LS -> LS: Set lessonFailed = true
+        LS --> U: Show Failed Screen
+    end
+end
+
+alt More Exercises
+    LS -> LS: currentExercise++
+    LS -> ER: Render Next Exercise
+    ER --> U: Display Next Exercise
+else All Complete
+    LS -> LS: completeLesson()
+    LS -> PC: awardXP() + updateSkillProgress()
+    PC -> FB: Update all progress
+    FB --> PC: Success
+    LS --> U: Show Completion Screen
+end
+
+@enduml

@@ -21,7 +21,15 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
   const [showFeedback, setShowFeedback] = useState(false);
   const [isSlowMode, setIsSlowMode] = useState(false);
 
-  // Auto-play audio when component mounts
+  // Reset state when exercise changes
+  useEffect(() => {
+    setSelectedOption(null);
+    setShowFeedback(false);
+    setIsPlaying(false);
+    setIsSlowMode(false);
+  }, [exercise.id]);
+
+  // Auto-play audio when component mounts or exercise changes
   useEffect(() => {
     if (exercise.questionAudio || exercise.audioFile) {
       handlePlay();
@@ -32,7 +40,7 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
       audioService.stopAll();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [exercise.id]);
 
   const handlePlay = async () => {
     if (isPlaying) {
@@ -103,7 +111,7 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
     setShowFeedback(true);
     
     setTimeout(() => {
-      onAnswer(isCorrect, exercise, selectedOption);
+      onAnswer(isCorrect, exercise, option);
     }, 1500);
   };
 
