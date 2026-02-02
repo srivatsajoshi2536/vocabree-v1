@@ -376,7 +376,7 @@ class LessonService {
     exercises.push({
       id: 'ex6',
       type: 'fillInBlank',
-      question: `"${vocab.word5}" means ___ in English.`,
+      question: `"${vocab.word5} (${englishVocab.word5.toLowerCase()})" means ___ in English.`,
       options: [englishVocab.word1, englishVocab.word2, englishVocab.word3, englishVocab.word5],
       correctAnswer: englishVocab.word5,
       explanation: `"${vocab.word5}" means "${englishVocab.word5}" in ${languageName}.`,
@@ -567,6 +567,16 @@ class LessonService {
 
     // Shuffle final exercises for variety
     practiceExercises = practiceExercises.sort(() => Math.random() - 0.5);
+
+    // Sanitize exercises for practice mode (remove hints)
+    practiceExercises = practiceExercises.map(ex => {
+      const newEx = { ...ex };
+      // Remove text in parentheses from question (e.g. hints like "(goodbye)")
+      if (newEx.question) {
+        newEx.question = newEx.question.replace(/\s*\([^)]+\)/g, '');
+      }
+      return newEx;
+    });
 
     return {
       lessonId: `${languageId}_${skillId}_practice_${Date.now()}`,

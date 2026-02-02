@@ -44,10 +44,12 @@ const HomeScreen = ({ navigation }) => {
 
   const languageProgress = getProgress(currentLanguage);
   const languageColor = getLanguageColor(currentLanguage);
-  // Calculate total XP from all languages (fallback to userProfile if available)
-  const totalXP = getTotalXP() || userProfile?.totalXP || 0;
-  const userLevel = totalXP ? calculateLevel(totalXP) : 1;
-  const levelProgress = totalXP ? getLevelProgress(totalXP, userLevel) : 0;
+
+  // Use language-specific XP and Level
+  const totalXP = languageProgress?.totalXP || 0;
+  // Use level from progress or calculate if missing (fallback to 1)
+  const userLevel = languageProgress?.level || (totalXP ? calculateLevel(totalXP) : 1);
+  const levelProgress = getLevelProgress(totalXP, userLevel);
 
   const handleStartLesson = () => {
     // Find first unlocked skill or current skill

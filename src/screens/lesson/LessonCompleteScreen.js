@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../../components/common/Button';
@@ -17,11 +17,11 @@ import { calculateLevel } from '../../utils/helpers';
 
 const LessonCompleteScreen = ({ route, navigation }) => {
   const { userProfile, updateUserProfile } = useAuth();
-  const { 
-    xpEarned = 10, 
-    accuracy = 85, 
-    totalExercises = 10, 
-    correctAnswers = 8, 
+  const {
+    xpEarned = 10,
+    accuracy = 85,
+    totalExercises = 10,
+    correctAnswers = 8,
     leveledUp = false,
     incorrectExercises = [],
     skillId,
@@ -30,7 +30,7 @@ const LessonCompleteScreen = ({ route, navigation }) => {
     level,
     isPractice = false,
   } = route.params || {};
-  
+
   const [newAchievements, setNewAchievements] = useState([]);
   const [showLevelUp, setShowLevelUp] = useState(leveledUp);
   const [showAchievement, setShowAchievement] = useState(false);
@@ -70,6 +70,16 @@ const LessonCompleteScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Close Button */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('MainTabs', { screen: 'Home' })}
+          style={styles.closeButton}
+        >
+          <Ionicons name="close" size={28} color={COLORS.textSecondary} />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -145,10 +155,10 @@ const LessonCompleteScreen = ({ route, navigation }) => {
           style={styles.continueButton}
         />
         {incorrectExercises && incorrectExercises.length > 0 && (
-        <Button
-          title="Review Mistakes"
-          variant="outline"
-          onPress={() => {
+          <Button
+            title="Review Mistakes"
+            variant="outline"
+            onPress={() => {
               navigation.navigate('ReviewMistakes', {
                 incorrectExercises,
                 skillId,
@@ -156,9 +166,9 @@ const LessonCompleteScreen = ({ route, navigation }) => {
                 languageId,
                 level,
               });
-          }}
-          style={styles.reviewButton}
-        />
+            }}
+            style={styles.reviewButton}
+          />
         )}
       </View>
 
@@ -224,6 +234,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+  },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    alignItems: 'flex-end',
+  },
+  closeButton: {
+    padding: 8,
   },
   scrollContent: {
     padding: 16,

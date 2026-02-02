@@ -77,47 +77,47 @@ const PracticeScreen = ({ navigation }) => {
           skill.requiredSkills.every(
             (reqId) => skillsObj[reqId]?.level >= 1
           );
-        
+
         if (!isUnlocked) return null;
-        
+
         const skillProgress = skillsObj[skill.id];
-        
+
         // Calculate priority score (higher = more needs practice)
         let priority = 0;
-        
+
         // If skill hasn't been started (level 0), it needs practice (especially basics_1)
         if (!skillProgress || skillProgress.level === 0) {
           // Give higher priority to basics_1 if not started
           priority = skill.id === 'basics_1' ? 20 : 10;
           return { skill, priority, skillProgress: null };
         }
-        
+
         // Skills not at max level need practice
         if (skillProgress.level < skill.levels) {
           priority += 10;
         }
-        
+
         // Skills not practiced recently need practice
-      if (skillProgress.lastPracticed) {
-        const lastPracticed = new Date(skillProgress.lastPracticed);
-        const daysSince = (Date.now() - lastPracticed.getTime()) / (1000 * 60 * 60 * 24);
+        if (skillProgress.lastPracticed) {
+          const lastPracticed = new Date(skillProgress.lastPracticed);
+          const daysSince = (Date.now() - lastPracticed.getTime()) / (1000 * 60 * 60 * 24);
           if (daysSince > 7) {
             priority += 5 + Math.min(10, daysSince - 7); // More days = higher priority
           }
         } else {
           priority += 5; // Never practiced
         }
-        
+
         // Skills with low accuracy need more practice
         if (skillProgress.accuracy !== undefined && skillProgress.accuracy < 70) {
           priority += 15 - skillProgress.accuracy / 5; // Lower accuracy = higher priority
         }
-        
+
         // If skill has been started but priority is 0, still give it some priority
         if (priority === 0 && skillProgress.level > 0) {
           priority = 1; // At least some priority if skill has been started
         }
-        
+
         return { skill, priority, skillProgress };
       })
       .filter((item) => item !== null && item.priority > 0)
@@ -147,10 +147,10 @@ const PracticeScreen = ({ navigation }) => {
 
     // Practice uses current level or highest completed level
     const practiceLevel = Math.max(1, Math.min(currentLevel, 5));
-    
+
     // Get previously incorrect exercises from progress (if stored)
     const incorrectExercises = skillProgress?.incorrectExercises || [];
-    
+
     // Generate practice lesson (5-7 exercises, includes mistakes)
     const practiceLesson = lessonService.generatePracticeLesson(
       languageId,
@@ -207,38 +207,7 @@ const PracticeScreen = ({ navigation }) => {
           </Text>
         </Card>
 
-        {/* Skills Needing Practice */}
-        {skillsNeedingPractice.length > 0 && (
-          <View style={styles.skillsSection}>
-            <Text style={styles.sectionTitle}>Skills Needing Practice</Text>
-            {skillsNeedingPractice.map((skill) => {
-              const skillProgress = languageProgress?.skills?.[skill.id];
-              return (
-                <TouchableOpacity
-                  key={skill.id}
-                  onPress={() => startPractice(skill.id)}
-                >
-                  <Card style={styles.skillCard}>
-                    <View style={styles.skillRow}>
-                      <Text style={styles.skillIcon}>{skill.icon}</Text>
-                      <View style={styles.skillInfo}>
-                        <Text style={styles.skillName}>{skill.name}</Text>
-                        <Text style={styles.skillLevel}>
-                          Level {skillProgress?.level || 0} / {skill.levels}
-                        </Text>
-                      </View>
-                      <Ionicons
-                        name="chevron-forward"
-                        size={24}
-                        color={COLORS.textSecondary}
-                      />
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        )}
+
 
         {/* All Skills */}
         <View style={styles.skillsSection}>
@@ -286,13 +255,13 @@ const PracticeScreen = ({ navigation }) => {
           <Ionicons name="information-circle" size={24} color={COLORS.primary} />
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>About Practice Mode</Text>
-          <Text style={styles.infoText}>
+            <Text style={styles.infoText}>
               • Shorter sessions (5-7 exercises) for quick review{'\n'}
               • Focuses on skills you need to strengthen{'\n'}
               • Includes exercises you got wrong before{'\n'}
               • Earns reduced XP (5 XP) but strengthens skills{'\n'}
               • Prevents skill decay and maintains progress
-          </Text>
+            </Text>
           </View>
         </Card>
       </ScrollView>

@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../common/Button';
 import { COLORS } from '../../theme/colors';
@@ -20,6 +20,7 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
   const [isPlaying, setIsPlaying] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isSlowMode, setIsSlowMode] = useState(false);
+  const [userInput, setUserInput] = useState('');
 
   // Reset state when exercise changes
   useEffect(() => {
@@ -27,6 +28,7 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
     setShowFeedback(false);
     setIsPlaying(false);
     setIsSlowMode(false);
+    setUserInput('');
   }, [exercise.id]);
 
   // Auto-play audio when component mounts or exercise changes
@@ -34,7 +36,7 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
     if (exercise.questionAudio || exercise.audioFile) {
       handlePlay();
     }
-    
+
     // Cleanup on unmount
     return () => {
       audioService.stopAll();
@@ -51,15 +53,15 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
     }
 
     setIsPlaying(true);
-    
+
     try {
       // Check if exercise has audioText (native script) or audioFile
       const audioText = exercise.audioText || exercise.questionAudio || exercise.audioFile;
-      
+
       if (audioText) {
         // If it's native script text (not a filename), use playText
         const isNativeScript = /[^\x00-\x7F]/.test(audioText) && !audioText.includes('.mp3');
-        
+
         if (isNativeScript) {
           await audioService.playText(
             audioText,
@@ -73,7 +75,7 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
             isSlowMode
           );
         }
-        
+
         // Wait a bit for playback to finish (approximate)
         // In production, you'd listen to playback status
         setTimeout(() => {
@@ -86,9 +88,9 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
           languageId,
           { rate: isSlowMode ? 0.7 : 0.9 }
         );
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, 2000);
+        setTimeout(() => {
+          setIsPlaying(false);
+        }, 2000);
       }
     } catch (error) {
       console.error('Error playing audio:', error);
@@ -105,11 +107,11 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
 
   const handleSelect = (option) => {
     if (showFeedback) return;
-    
+
     setSelectedOption(option);
     const isCorrect = option === exercise.correctAnswer;
     setShowFeedback(true);
-    
+
     setTimeout(() => {
       onAnswer(isCorrect, exercise, option);
     }, 1500);
@@ -132,9 +134,9 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
           />
         </TouchableOpacity>
         <View style={styles.audioControls}>
-        <Text style={styles.audioLabel}>
-          {isPlaying ? 'Playing...' : 'Tap to play audio'}
-        </Text>
+          <Text style={styles.audioLabel}>
+            {isPlaying ? 'Playing...' : 'Tap to play audio'}
+          </Text>
           <TouchableOpacity
             onPress={handleSlowToggle}
             style={[styles.slowButton, isSlowMode && styles.slowButtonActive]}
@@ -193,19 +195,27 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
         ) : (
           <View style={styles.textInputContainer}>
             <Text style={styles.inputLabel}>Type what you heard:</Text>
-            <Text style={styles.placeholderInput}>
-              {selectedOption || 'Enter your answer here'}
-            </Text>
+            <TextInput
+              style={styles.textInput}
+              value={userInput}
+              onChangeText={setUserInput}
+              placeholder="Enter your answer here"
+              placeholderTextColor={COLORS.textSecondary}
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable={!showFeedback}
+            />
             <Button
               title="Check Answer"
               onPress={() => {
-                // For demo, accept any answer
+                const isCorrect = userInput.trim().toLowerCase() === exercise.correctAnswer.toLowerCase();
                 setShowFeedback(true);
                 setTimeout(() => {
-                  onAnswer(true, exercise);
+                  onAnswer(isCorrect, exercise, userInput);
                 }, 1500);
               }}
               style={styles.checkButton}
+              disabled={!userInput.trim()}
             />
           </View>
         )}
@@ -217,12 +227,12 @@ const ListeningRenderer = ({ exercise, onAnswer, languageId: propLanguageId, isP
           <Text
             style={[
               styles.feedbackText,
-              selectedOption === exercise.correctAnswer
+              (selectedOption || userInput.trim().toLowerCase()) === exercise.correctAnswer.toLowerCase()
                 ? styles.correctFeedback
                 : styles.incorrectFeedback,
             ]}
           >
-            {selectedOption === exercise.correctAnswer
+            {(selectedOption || userInput.trim().toLowerCase()) === exercise.correctAnswer.toLowerCase()
               ? '✓ Correct!'
               : `✗ Incorrect. Correct answer: ${exercise.correctAnswer}`}
           </Text>
@@ -321,16 +331,16 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.label,
     marginBottom: 8,
   },
-  placeholderInput: {
+  textInput: {
     ...TYPOGRAPHY.body,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.white,
     padding: 16,
     borderRadius: 8,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: COLORS.border,
     marginBottom: 16,
     minHeight: 50,
-    color: COLORS.textSecondary,
+    color: COLORS.text,
   },
   checkButton: {
     marginTop: 8,
