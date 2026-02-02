@@ -17,7 +17,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../../components/common/Card';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 import { useColors } from '../../hooks/useColors';
 import { COLORS } from '../../theme/colors';
 import { TYPOGRAPHY } from '../../theme/typography';
@@ -27,13 +26,9 @@ import audioService from '../../services/audioService';
 
 const SettingsScreen = ({ navigation }) => {
   const { userProfile, updateUserProfile, isPreviewMode } = useAuth();
-  const { isDarkMode, themePreference, toggleDarkMode } = useTheme();
   const colors = useColors();
   const [soundEnabled, setSoundEnabled] = useState(
     userProfile?.settings?.soundEnabled ?? true
-  );
-  const [speakingEnabled, setSpeakingEnabled] = useState(
-    userProfile?.settings?.speakingEnabled ?? true
   );
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     userProfile?.settings?.notificationsEnabled ?? true
@@ -51,24 +46,12 @@ const SettingsScreen = ({ navigation }) => {
     setSoundEnabled(value);
     // Update audio service
     await audioService.setSoundEnabled(value);
-    
+
     if (!isPreviewMode) {
       await updateUserProfile({
         settings: {
           ...userProfile?.settings,
           soundEnabled: value,
-        },
-      });
-    }
-  };
-
-  const handleSpeakingToggle = async (value) => {
-    setSpeakingEnabled(value);
-    if (!isPreviewMode) {
-      await updateUserProfile({
-        settings: {
-          ...userProfile?.settings,
-          speakingEnabled: value,
         },
       });
     }
@@ -93,23 +76,6 @@ const SettingsScreen = ({ navigation }) => {
     }
   };
 
-  const handleResetProgress = () => {
-    Alert.alert(
-      'Reset Progress',
-      'Are you sure you want to reset all your progress? This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Reset',
-          style: 'destructive',
-          onPress: () => {
-            Alert.alert('Reset Progress', 'Progress reset feature coming soon!');
-          },
-        },
-      ]
-    );
-  };
-
   const handleDeleteAccount = () => {
     Alert.alert(
       'Delete Account',
@@ -130,23 +96,23 @@ const SettingsScreen = ({ navigation }) => {
   const SettingItem = ({ icon, title, description, children, onPress }) => {
     const colors = useColors();
     return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={styles.settingItem}
-      disabled={!onPress}
-    >
-      <View style={styles.settingLeft}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={styles.settingItem}
+        disabled={!onPress}
+      >
+        <View style={styles.settingLeft}>
           <Ionicons name={icon} size={24} color={colors.primary} />
-        <View style={styles.settingText}>
+          <View style={styles.settingText}>
             <Text style={[styles.settingTitle, { color: colors.textPrimary }]}>{title}</Text>
-          {description && (
+            {description && (
               <Text style={[styles.settingDescription, { color: colors.textSecondary }]}>{description}</Text>
-          )}
+            )}
+          </View>
         </View>
-      </View>
-      {children}
-    </TouchableOpacity>
-  );
+        {children}
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -198,44 +164,6 @@ const SettingsScreen = ({ navigation }) => {
         {/* Preferences */}
         <Card style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Preferences</Text>
-          
-          <SettingItem
-            icon={isDarkMode ? "moon" : "sunny"}
-            title="Dark Mode"
-            description={themePreference === 'system' ? 'Follow system' : themePreference === 'dark' ? 'Dark mode enabled' : 'Light mode enabled'}
-          >
-            <View style={styles.themeOptions}>
-              <TouchableOpacity
-                onPress={() => toggleDarkMode('light')}
-                style={[
-                  styles.themeOption,
-                  themePreference === 'light' && { backgroundColor: colors.primary }
-                ]}
-              >
-                <Ionicons name="sunny" size={16} color={themePreference === 'light' ? colors.white : colors.textSecondary} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => toggleDarkMode('dark')}
-                style={[
-                  styles.themeOption,
-                  themePreference === 'dark' && { backgroundColor: colors.primary }
-                ]}
-              >
-                <Ionicons name="moon" size={16} color={themePreference === 'dark' ? colors.white : colors.textSecondary} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => toggleDarkMode('system')}
-                style={[
-                  styles.themeOption,
-                  themePreference === 'system' && { backgroundColor: colors.primary }
-                ]}
-              >
-                <Ionicons name="phone-portrait" size={16} color={themePreference === 'system' ? colors.white : colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
-          </SettingItem>
-
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
           <SettingItem
             icon="volume-high"
@@ -245,23 +173,6 @@ const SettingsScreen = ({ navigation }) => {
             <Switch
               value={soundEnabled}
               onValueChange={handleSoundToggle}
-              trackColor={{
-                false: colors.border,
-                true: colors.success,
-              }}
-            />
-          </SettingItem>
-
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-          <SettingItem
-            icon="mic"
-            title="Speaking Exercises"
-            description="Enable speaking exercises in lessons"
-          >
-            <Switch
-              value={speakingEnabled}
-              onValueChange={handleSpeakingToggle}
               trackColor={{
                 false: colors.border,
                 true: colors.success,
@@ -291,36 +202,6 @@ const SettingsScreen = ({ navigation }) => {
         <Card style={styles.section}>
           <Text style={styles.sectionTitle}>Account</Text>
           <SettingItem
-            icon="lock-closed"
-            title="Change Password"
-            description="Update your account password"
-            onPress={() => Alert.alert('Change Password', 'Feature coming soon!')}
-          >
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={COLORS.textSecondary}
-            />
-          </SettingItem>
-
-          <View style={styles.divider} />
-
-          <SettingItem
-            icon="refresh"
-            title="Reset Progress"
-            description="Start over with all lessons"
-            onPress={handleResetProgress}
-          >
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={COLORS.textSecondary}
-            />
-          </SettingItem>
-
-          <View style={styles.divider} />
-
-          <SettingItem
             icon="trash"
             title="Delete Account"
             description="Permanently delete your account"
@@ -347,7 +228,7 @@ const SettingsScreen = ({ navigation }) => {
             icon="document-text"
             title="Privacy Policy"
             description="Read our privacy policy"
-            onPress={() => Alert.alert('Privacy Policy', 'Coming soon!')}
+            onPress={() => navigation.navigate('PrivacyPolicy')}
           >
             <Ionicons
               name="chevron-forward"
@@ -360,7 +241,7 @@ const SettingsScreen = ({ navigation }) => {
             icon="document-text"
             title="Terms of Service"
             description="Read our terms of service"
-            onPress={() => Alert.alert('Terms of Service', 'Coming soon!')}
+            onPress={() => navigation.navigate('TermsOfService')}
           >
             <Ionicons
               name="chevron-forward"
@@ -400,20 +281,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-  },
-  themeOptions: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  themeOption: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: COLORS.background,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   backButton: {
     padding: 8,

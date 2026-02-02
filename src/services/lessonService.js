@@ -264,7 +264,7 @@ class LessonService {
       // Fallback to basics_1 if skill not found
       const fallbackVocab = vocabularies.basics_1?.[1];
       if (fallbackVocab) {
-        return languageId === 'english' 
+        return languageId === 'english'
           ? (fallbackVocab.english || fallbackVocab.hindi)
           : (fallbackVocab[languageId] || fallbackVocab.hindi);
       }
@@ -276,12 +276,12 @@ class LessonService {
     if (!levelVocab) {
       return {};
     }
-    
+
     // If requesting English, return the english key from levelVocab
     if (languageId === 'english') {
       return levelVocab.english || levelVocab.hindi || {};
     }
-    
+
     // Return language-specific vocabulary
     return levelVocab[languageId] || levelVocab.hindi || {};
   }
@@ -449,12 +449,16 @@ class LessonService {
       return null; // Already English, no translation needed
     }
 
-    // If skillId and level are provided, search in that specific vocabulary first
+    // Always search through all vocabularies to ensure we find translations
+    // from earlier levels (e.g., Yes/No from level 1 appearing in later lessons)
+    const allSkills = ['basics_1', 'basics_2', 'numbers', 'family', 'food'];
+
+    // First, try the specific skill and level if provided
     if (skillId && level) {
       try {
         const vocab = this.getVocabulary(languageId, skillId, level);
         const englishVocab = this.getVocabulary('english', skillId, level);
-        
+
         // Search through all word keys (word1, word2, etc.)
         for (let i = 1; i <= 5; i++) {
           const wordKey = `word${i}`;
@@ -467,15 +471,13 @@ class LessonService {
       }
     }
 
-    // Otherwise, search through all vocabularies
-    const allSkills = ['basics_1', 'basics_2', 'numbers', 'family', 'food'];
-    
+    // Search through all vocabularies (including all levels of all skills)
     for (const skill of allSkills) {
       for (let lvl = 1; lvl <= 5; lvl++) {
         try {
           const vocab = this.getVocabulary(languageId, skill, lvl);
           const englishVocab = this.getVocabulary('english', skill, lvl);
-          
+
           if (vocab && englishVocab) {
             for (let i = 1; i <= 5; i++) {
               const wordKey = `word${i}`;
@@ -522,10 +524,10 @@ class LessonService {
   generatePracticeLesson(languageId, skillId, level, incorrectExercises = []) {
     const fullLesson = this.getLesson(languageId, skillId, level);
     const allExercises = fullLesson.exercises || [];
-    
+
     // Practice session: 5-7 exercises
     const practiceExerciseCount = Math.min(7, Math.max(5, Math.floor(allExercises.length * 0.6)));
-    
+
     // Prioritize incorrect exercises (if available)
     let practiceExercises = [];
     if (incorrectExercises.length > 0) {
@@ -533,17 +535,17 @@ class LessonService {
       const incorrectCount = Math.min(3, incorrectExercises.length);
       practiceExercises = incorrectExercises.slice(0, incorrectCount);
     }
-    
+
     // Fill remaining slots with random exercises, ensuring variety
     const remainingCount = practiceExerciseCount - practiceExercises.length;
     const availableExercises = allExercises.filter(
       ex => !practiceExercises.some(pe => pe.id === ex.id)
     );
-    
+
     // Shuffle and select diverse exercise types
     const shuffled = [...availableExercises].sort(() => Math.random() - 0.5);
     const exerciseTypes = new Set();
-    
+
     for (const exercise of shuffled) {
       if (practiceExercises.length >= practiceExerciseCount) break;
       // Prefer exercises of types we haven't included yet
@@ -552,7 +554,7 @@ class LessonService {
         exerciseTypes.add(exercise.type);
       }
     }
-    
+
     // If still not enough, add more random exercises
     while (practiceExercises.length < practiceExerciseCount && shuffled.length > 0) {
       const next = shuffled.find(ex => !practiceExercises.some(pe => pe.id === ex.id));
@@ -562,10 +564,10 @@ class LessonService {
         break;
       }
     }
-    
+
     // Shuffle final exercises for variety
     practiceExercises = practiceExercises.sort(() => Math.random() - 0.5);
-    
+
     return {
       lessonId: `${languageId}_${skillId}_practice_${Date.now()}`,
       skillId,

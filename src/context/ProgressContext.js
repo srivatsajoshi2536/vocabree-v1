@@ -41,7 +41,7 @@ export const ProgressProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      
+
       // Check if preview mode
       const isPreviewMode = await previewService.checkPreviewMode();
       if (isPreviewMode) {
@@ -115,7 +115,26 @@ export const ProgressProvider = ({ children }) => {
         return newProgress;
       }
     } catch (err) {
-      console.error('Error loading progress:', err);
+      // Don't log permission errors for new users - this is expected
+      if (err.code !== 'permission-denied' && err.code !== 'PERMISSION_DENIED') {
+        console.error('Error loading progress:', err);
+      }
+
+      // Try to load from cache if available
+      try {
+        const cached = await AsyncStorage.getItem(`progress_${languageId}`);
+        if (cached) {
+          const cachedData = JSON.parse(cached);
+          setProgress((prev) => ({
+            ...prev,
+            [languageId]: cachedData,
+          }));
+          return cachedData;
+        }
+      } catch (cacheErr) {
+        // Ignore cache errors
+      }
+
       return null;
     } finally {
       setLoading(false);
@@ -143,7 +162,7 @@ export const ProgressProvider = ({ children }) => {
           const allMockProgress = Object.values(previewService.mockProgress || {});
           const totalMockXP = allMockProgress.reduce((sum, p) => sum + (p?.totalXP || 0), 0);
           previewService.updateMockUserProfile({ totalXP: totalMockXP });
-          
+
           // Also update AuthContext's userProfile if it's using preview mode
           // This will be handled by AuthContext when it checks preview mode
         }
@@ -153,7 +172,7 @@ export const ProgressProvider = ({ children }) => {
       // Normal mode - use Firebase
       const progressId = `${user.uid}_${languageId}`;
       const currentProgress = progress[languageId] || await loadProgress(languageId);
-      
+
       const totalXP = (currentProgress?.totalXP || 0) + xp + bonusXP;
       const newLevel = calculateLevel(totalXP);
       const oldLevel = currentProgress?.level || 1;
@@ -184,13 +203,13 @@ export const ProgressProvider = ({ children }) => {
           })
         );
         const aggregatedTotalXP = allProgressDocs.reduce((sum, xp) => sum + xp, 0);
-        
+
         // Update userProfile totalXP
         await updateDoc(doc(db, 'users', user.uid), {
           totalXP: aggregatedTotalXP,
           updatedAt: new Date(),
         });
-        
+
         // Reload userProfile to reflect updated totalXP
         if (reloadUserProfileCallback) {
           reloadUserProfileCallback();
@@ -239,7 +258,7 @@ export const ProgressProvider = ({ children }) => {
 
       const lastActiveDate = currentProgress.lastActiveDate?.toDate();
       const shouldMaintain = shouldMaintainStreak(lastActiveDate);
-      
+
       let currentStreak = currentProgress.currentStreak || 0;
       let longestStreak = currentProgress.longestStreak || 0;
 

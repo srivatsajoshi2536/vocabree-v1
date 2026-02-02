@@ -18,6 +18,8 @@ import ReviewMistakesScreen from '../screens/lesson/ReviewMistakesScreen';
 import PracticeScreen from '../screens/practice/PracticeScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import SettingsScreen from '../screens/profile/SettingsScreen';
+import PrivacyPolicyScreen from '../screens/profile/PrivacyPolicyScreen';
+import TermsOfServiceScreen from '../screens/profile/TermsOfServiceScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,39 +71,53 @@ const AppNavigator = () => {
       }}
     >
       <Stack.Screen name="MainTabs" component={MainTabs} />
-      <Stack.Screen 
-        name="Lesson" 
+      <Stack.Screen
+        name="Lesson"
         component={LessonScreen}
         options={{
           presentation: 'modal',
         }}
       />
-      <Stack.Screen 
-        name="LessonComplete" 
+      <Stack.Screen
+        name="LessonComplete"
         component={LessonCompleteScreen}
         options={{
           presentation: 'modal',
         }}
       />
-      <Stack.Screen 
-        name="ReviewMistakes" 
+      <Stack.Screen
+        name="ReviewMistakes"
         component={ReviewMistakesScreen}
         options={{
           presentation: 'modal',
         }}
       />
-      <Stack.Screen 
-        name="Settings" 
+      <Stack.Screen
+        name="Settings"
         component={SettingsScreen}
         options={{
           presentation: 'modal',
         }}
       />
       <Stack.Screen
-  name="OcrTranslate"
-  component={OcrTranslateScreen}
-  options={{ title: "Image Translate" }}
-/>
+        name="PrivacyPolicy"
+        component={PrivacyPolicyScreen}
+        options={{
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="TermsOfService"
+        component={TermsOfServiceScreen}
+        options={{
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="OcrTranslate"
+        component={OcrTranslateScreen}
+        options={{ title: "Image Translate" }}
+      />
     </Stack.Navigator>
   );
 };

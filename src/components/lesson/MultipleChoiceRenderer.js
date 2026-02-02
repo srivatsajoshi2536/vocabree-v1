@@ -38,11 +38,11 @@ const MultipleChoiceRenderer = ({ exercise, onAnswer, languageId: propLanguageId
     try {
       // Check if exercise has audioText (native script) or audioFile
       const audioText = exercise.audioText || exercise.questionAudio || exercise.audioFile;
-      
+
       if (audioText) {
         // If it's native script text (not a filename), use playText
         const isNativeScript = /[^\x00-\x7F]/.test(audioText) && !audioText.includes('.mp3');
-        
+
         if (isNativeScript) {
           await audioService.playText(audioText, languageId);
         } else {
@@ -61,20 +61,55 @@ const MultipleChoiceRenderer = ({ exercise, onAnswer, languageId: propLanguageId
 
   const handleSelect = (option) => {
     if (showFeedback) return; // Prevent selection after answer
-    
+
     setSelectedOption(option);
     const isCorrect = option === exercise.correctAnswer;
     setShowFeedback(true);
-    
+
     setTimeout(() => {
       onAnswer(isCorrect, exercise, option);
     }, 1500);
   };
 
+  // Enhance question text with English translations for native script words (only in lessons, not practice)
+  const getEnhancedQuestion = () => {
+    if (isPractice) {
+      return exercise.question;
+    }
+
+    let enhancedQuestion = exercise.question;
+
+    // Check if question contains native script in quotes
+    const quotedWordMatch = enhancedQuestion.match(/"([^"]+)"/);
+    if (quotedWordMatch) {
+      const nativeWord = quotedWordMatch[1];
+      const isNativeScript = /[^\x00-\x7F]/.test(nativeWord);
+
+      if (isNativeScript) {
+        const englishTranslation = lessonService.getEnglishTranslation(
+          nativeWord,
+          languageId,
+          skillId,
+          level
+        );
+
+        if (englishTranslation) {
+          // Replace the quoted word with word + translation
+          enhancedQuestion = enhancedQuestion.replace(
+            `"${nativeWord}"`,
+            `"${nativeWord} (${englishTranslation})"`
+          );
+        }
+      }
+    }
+
+    return enhancedQuestion;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.questionContainer}>
-      <Text style={styles.question}>{exercise.question}</Text>
+        <Text style={styles.question}>{getEnhancedQuestion()}</Text>
         {(exercise.questionAudio || exercise.audioFile || exercise.question) && (
           <TouchableOpacity
             onPress={handlePlayAudio}
@@ -88,7 +123,7 @@ const MultipleChoiceRenderer = ({ exercise, onAnswer, languageId: propLanguageId
           </TouchableOpacity>
         )}
       </View>
-      
+
       <View style={styles.optionsContainer}>
         {exercise.options.map((option, index) => {
           const isSelected = selectedOption === option;

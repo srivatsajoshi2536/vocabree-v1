@@ -23,6 +23,7 @@ import { COLORS } from '../../theme/colors';
 import { TYPOGRAPHY } from '../../theme/typography';
 import previewService from '../../services/previewService';
 
+
 const LoginScreen = ({ navigation }) => {
   const { login, loading, error, setError } = useAuth();
 
@@ -300,6 +301,47 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginBottom: 28,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  divider: {
+    flex: 1,
+    height: 3,
+    backgroundColor: COLORS.border,
+  },
+  dividerText: {
+    ...TYPOGRAPHY.bodySmall,
+    fontWeight: '900',
+    color: COLORS.textSecondary,
+    marginHorizontal: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: COLORS.white,
+    borderWidth: 3,
+    borderColor: COLORS.border,
+  },
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.white,
+    padding: 18,
+    borderWidth: 4,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    marginBottom: 28,
+  },
+  googleButtonText: {
+    ...TYPOGRAPHY.button,
+    color: COLORS.textPrimary,
+    marginLeft: 12,
+    fontWeight: '900',
   },
   footer: {
     flexDirection: 'row',
