@@ -42,7 +42,7 @@ const LessonScreen = ({ route, navigation }) => {
     loadLessonData();
     // Initialize audio service
     audioService.initialize();
-    
+
     // Cleanup on unmount
     return () => {
       audioService.stopAll();
@@ -54,8 +54,8 @@ const LessonScreen = ({ route, navigation }) => {
     if (isPractice && route.params?.lessonData) {
       setLessonData(route.params.lessonData);
     } else {
-    const lesson = lessonService.getLesson(languageId || 'hindi', skillId || 'basics_1', level);
-    setLessonData(lesson);
+      const lesson = lessonService.getLesson(languageId || 'hindi', skillId || 'basics_1', level);
+      setLessonData(lesson);
     }
   };
 
@@ -65,8 +65,11 @@ const LessonScreen = ({ route, navigation }) => {
   const currentExerciseData = exercises[currentExercise];
 
   const handleAnswer = async (isCorrect, exercise, userAnswer = null) => {
+    // Calculate the new correct answers count
+    const newCorrectAnswers = isCorrect ? correctAnswers + 1 : correctAnswers;
+
     if (isCorrect) {
-      setCorrectAnswers(correctAnswers + 1);
+      setCorrectAnswers(newCorrectAnswers);
     } else {
       const newHearts = hearts - 1;
       setHearts(newHearts);
@@ -91,15 +94,15 @@ const LessonScreen = ({ route, navigation }) => {
         setCurrentExercise(currentExercise + 1);
       }, 2000);
     } else {
-      // Lesson complete
-      completeLesson();
+      // Lesson complete - pass the updated correct answers count
+      completeLesson(newCorrectAnswers);
     }
   };
 
-  const completeLesson = async () => {
+  const completeLesson = async (finalCorrectAnswers) => {
     // Practice mode gives reduced XP (5 XP) vs regular lessons (10 XP)
     const baseXP = isPractice ? 5 : (lessonData?.xpReward || 10);
-    const accuracy = (correctAnswers / totalExercises) * 100;
+    const accuracy = (finalCorrectAnswers / totalExercises) * 100;
     const bonusXP = accuracy === 100 ? (isPractice ? 2 : 5) : 0; // Reduced bonus for practice
     const xpEarned = baseXP + bonusXP;
 
@@ -108,7 +111,7 @@ const LessonScreen = ({ route, navigation }) => {
     const leveledUp = xpResult?.leveledUp || false;
 
     // Update skill progress - practice strengthens skills (prevents decay)
-    const skillLevel = Math.min(5, Math.floor((correctAnswers / totalExercises) * 5) + 1);
+    const skillLevel = Math.min(5, Math.floor((finalCorrectAnswers / totalExercises) * 5) + 1);
     await updateSkillProgress(
       languageId || 'hindi',
       skillId || 'basics_1',
@@ -121,7 +124,7 @@ const LessonScreen = ({ route, navigation }) => {
       xpEarned: xpEarned,
       accuracy,
       totalExercises,
-      correctAnswers,
+      correctAnswers: finalCorrectAnswers,
       skillId,
       skillName,
       leveledUp,
